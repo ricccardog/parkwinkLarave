@@ -8,9 +8,20 @@ use App\Models\Car;
 class CarController extends Controller
 {
 
-    public function getAllCars()
+    public function getAllCars(Request $request)
     {
-        $cars = Car::get();
+        $pageNo = $request -> size * ($request -> pageNo -1);
+        $size = $request -> size;
+        $sort = $request -> sort;
+        $order = $request -> order;
+        
+        if($order == 1){
+            $cars = Car::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
+
+        } else {
+            $cars = Car::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
+
+        }
         return response($cars, 200);
     }
 

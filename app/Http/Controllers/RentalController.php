@@ -9,9 +9,21 @@ use App\Models\Customer;
 
 class RentalController extends Controller
 {
-    public function getAllRentals()
+    public function getAllRentals(Request $request)
     {
-        $rentals = Rental::get();
+        $pageNo = $request -> size * ($request -> pageNo -1);
+        $size = $request -> size;
+        $sort = $request -> sort;
+        $order = $request -> order;
+
+        if($order == 1){
+            $rentals = Rental::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
+
+        } else {
+            $rentals = Rental::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
+
+        }
+
         foreach ($rentals as $item) {
             $item->car_id = Car::find($item->car_id, ['maker', 'model']);
             $item->customer_id = Customer::find($item->customer_id, ['name', 'surname']);

@@ -9,20 +9,32 @@ class CustomerController extends Controller
 {
     public function getAllCustomers(Request $request) 
     {
+        #sort parameters
         $pageNo = $request -> size * ($request -> pageNo -1);
         $size = $request -> size;
-        $sort = $request -> sort;
+        $sort = $request -> toSort;
         $order = $request -> order;
         
-        if($order == 'asc'){
-            $customers = Customer::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
+        #get | sort | page
+        if($order == 1){
+            $customers = Customer::get()->skip($pageNo)->take($size)->sortBy($sort);
 
         } else {
-            $customers = Customer::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
+            $customers = Customer::get()->skip($pageNo)->take($size)->sortByDesc($sort);
 
         }
-       
+        #optional search
+        if($request-> searchKey){
+            $query = $request -> searchValue;
+            $key = $request -> searchKey;
+
+            $customers = $customers->where($key, $query)->values()->all();
+        }else {
+            $customers = $customers->values()->all();
+        }
+      
         return response($customers, 200);
+    
     }
 
     public function createCustomer(Request $request) {
