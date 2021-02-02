@@ -10,7 +10,7 @@ class CarController extends Controller
 
     public function getAllCars()
     {
-        $cars = Car::get()->toJson(JSON_PRETTY_PRINT);
+        $cars = Car::get();
         return response($cars, 200);
     }
 
@@ -29,7 +29,7 @@ class CarController extends Controller
     public function getCar($id)
     {
         if (Car::where('id', $id)->exists()) {
-            $car = Car::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            $car = Car::where('id', $id)->get();
             return response($car, 200);
         } else {
             return response()->json(["message" => "Car not found"], 404);

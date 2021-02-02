@@ -16,8 +16,6 @@ class RentalController extends Controller
             $item->car_id = Car::find($item->car_id, ['maker', 'model']);
             $item->customer_id = Customer::find($item->customer_id, ['name', 'surname']);
         }
-
-
         return response($rentals, 200);
     }
 

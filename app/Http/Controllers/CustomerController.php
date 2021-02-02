@@ -7,8 +7,21 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    public function getAllCustomers() {
-        $customers = Customer::get()->toJson(JSON_PRETTY_PRINT);
+    public function getAllCustomers(Request $request) 
+    {
+        $pageNo = $request -> size * ($request -> pageNo -1);
+        $size = $request -> size;
+        $sort = $request -> sort;
+        $order = $request -> order;
+        
+        if($order == 'asc'){
+            $customers = Customer::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
+
+        } else {
+            $customers = Customer::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
+
+        }
+       
         return response($customers, 200);
     }
 
@@ -27,7 +40,7 @@ class CustomerController extends Controller
 
     public function getCustomer($id) {
         if(Customer::where('id', $id)->exists()) {
-            $customer = Customer::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            $customer = Customer::where('id', $id)->get();
             return response($customer, 200);
         }else{
             return response()->json(['message' => 'Customer not found'], 404);
