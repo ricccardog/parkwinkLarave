@@ -10,18 +10,36 @@ class CarController extends Controller
 
     public function getAllCars(Request $request)
     {
-        $pageNo = $request -> size * ($request -> pageNo -1);
-        $size = $request -> size;
-        $sort = $request -> sort;
-        $order = $request -> order;
+        #optional search
+        if($request -> searchKey and $request-> searchValue){
+
+            $query = $request-> searchValue;
+            $key = $request-> searchKey;
+
+            $cars = Car::get()->where($key, $query)->values()->all();
         
-        if($order == 1){
-            $cars = Car::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
-
         } else {
-            $cars = Car::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
 
+            #sort parameters
+            $pageNo = $request -> size * ($request -> pageNo -1);
+            $size = $request -> size;
+            $sort = $request -> sort;
+            $order = $request -> order;
+            
+            #get | sort | page
+            if($order == 1 or $order == null){
+                
+                $cars = Car::get()->sortBy($sort)->skip($pageNo)->take($size);
+            
+            } else {
+
+                $cars = Car::get()->sortByDesc($sort)->skip($pageNo)->take($size);
+
+            }
+        #display collection
+        $cars = $cars->values()->all();
         }
+
         return response($cars, 200);
     }
 

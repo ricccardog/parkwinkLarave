@@ -9,28 +9,34 @@ class CustomerController extends Controller
 {
     public function getAllCustomers(Request $request) 
     {
-        #sort parameters
-        $pageNo = $request -> size * ($request -> pageNo -1);
-        $size = $request -> size;
-        $sort = $request -> toSort;
-        $order = $request -> order;
-        
-        #get | sort | page
-        if($order == 1){
-            $customers = Customer::get()->skip($pageNo)->take($size)->sortBy($sort);
+         #optional search
+         if($request-> searchKey and $request-> searchValue){
 
-        } else {
-            $customers = Customer::get()->skip($pageNo)->take($size)->sortByDesc($sort);
-
-        }
-        #optional search
-        if($request-> searchKey){
             $query = $request -> searchValue;
             $key = $request -> searchKey;
 
-            $customers = $customers->where($key, $query)->values()->all();
-        }else {
-            $customers = $customers->values()->all();
+            $customers = Customer::get()->where($key, $query)->values()->all();
+
+        } else {
+
+            #sort parameters
+            $pageNo = $request -> size * ($request -> pageNo -1);
+            $size = $request -> size;
+            $sort = $request -> sort;
+            $order = $request -> order;
+            
+            #get | sort | page
+            if($order == 1 or $order == null){
+
+                $customers = Customer::get()->sortBy($sort)->skip($pageNo)->take($size);
+
+            } else {
+
+                $customers = Customer::get()->sortByDesc($sort)->skip($pageNo)->take($size);
+
+            }
+        #display collection
+        $customers = $customers->values()->all();
         }
       
         return response($customers, 200);
