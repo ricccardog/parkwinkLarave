@@ -11,24 +11,44 @@ class RentalController extends Controller
 {
     public function getAllRentals(Request $request)
     {
-        $pageNo = $request -> size * ($request -> pageNo -1);
-        $size = $request -> size;
-        $sort = $request -> sort;
-        $order = $request -> order;
+         #optional search
+        if($request -> searchKey and $request-> searchValue){
 
-        if($order == 1){
-            $rentals = Rental::get()->skip($pageNo)->take($size)->sortBy($sort)->values()->all();
+            $query = $request-> searchValue;
+            $key = $request-> searchKey;
+
+            $rentals = Rental::get()->where($key, $query)->values()->all();
 
         } else {
-            $rentals = Rental::get()->skip($pageNo)->take($size)->sortByDesc($sort)->values()->all();
+            
+            #sort parameters
+            $pageNo = $request -> size * ($request -> pageNo -1);
+            $size = $request -> size;
+            $sort = $request -> sort;
+            $order = $request -> order;
 
+                #get | sort | page
+                if($order == 1 or $order == null){
+                
+                    $rentals = Rental::get()->sortBy($sort)->skip($pageNo)->take($size)->values()->all();
+
+                } else {
+                
+                    $rentals = Rental::get()->sortByDesc($sort)->skip($pageNo)->take($size)->values()->all();
+
+                }
         }
 
+        #populate car | customer
         foreach ($rentals as $item) {
+
             $item->car_id = Car::find($item->car_id, ['maker', 'model']);
+
             $item->customer_id = Customer::find($item->customer_id, ['name', 'surname']);
         }
+        
         return response($rentals, 200);
+    
     }
 
     public function createRental(Request $request)
