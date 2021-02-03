@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Car;
+use App\Models\Rental;
 
 class CarController extends Controller
 {
@@ -16,7 +17,7 @@ class CarController extends Controller
             $query = $request-> searchValue;
             $key = $request-> searchKey;
 
-            $cars = Car::get()->where($key, $query)->values()->all();
+            $cars = Car::get()->where($key, 'LIKE', '%'.$query.'%')->values()->all();
         
         } else {
 

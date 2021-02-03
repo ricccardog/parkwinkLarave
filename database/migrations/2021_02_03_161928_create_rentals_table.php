@@ -13,12 +13,14 @@ class CreateRentalsTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('rentals', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('car_id')->unsigned();
-            $table->foreign('car_id')->references('id')->on('cars');
+            $table->foreign('car_id')->references('id')->on('cars')->onDelete('set null')->onUpdate('cascade');
             $table->integer('customer_id')->unsigned();
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete ('set null')->onUpdate('cascade');
             $table->date('startDate');
             $table->date('endDate');
             $table->float('price');

@@ -69,8 +69,8 @@ class RentalController extends Controller
         if (Rental::where('id', $id)->exists()) {
 
             $rental =  Rental::where('id', $id)->first();
-            $rental->car_id = Car::find($rental->car_id);
-            $rental->customer_id = Customer::find($rental->customer_id);
+            $rental->car_id = Car::find($rental->car_id , ['maker', 'model']);
+            $rental->customer_id = Customer::find($rental->customer_id , ['name', 'surname']);
 
             return response($rental, 200);
         } else {
