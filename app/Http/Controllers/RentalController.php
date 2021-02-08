@@ -17,7 +17,7 @@ class RentalController extends Controller
             $query = $request-> searchValue;
             $key = $request-> searchKey;
 
-            $rentals = Rental::get()->where($key, $query)->values()->all();
+            $rentals = Rental::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();
 
         } else {
             

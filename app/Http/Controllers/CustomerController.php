@@ -15,7 +15,7 @@ class CustomerController extends Controller
             $query = $request -> searchValue;
             $key = $request -> searchKey;
 
-            $customers = Customer::get()->where($key, $query)->values()->all();
+            $customers = Customer::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();;
 
         } else {
 

@@ -17,7 +17,7 @@ class CarController extends Controller
             $query = $request-> searchValue;
             $key = $request-> searchKey;
 
-            $cars = Car::get()->where($key, 'LIKE', '%'.$query.'%')->values()->all();
+            $cars = Car::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();
         
         } else {
 
