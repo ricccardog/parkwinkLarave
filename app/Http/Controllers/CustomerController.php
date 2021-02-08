@@ -10,12 +10,12 @@ class CustomerController extends Controller
     public function getAllCustomers(Request $request) 
     {
          #optional search
-         if($request-> searchKey and $request-> searchValue){
+        if($request-> searchKey and $request-> searchValue){
 
             $query = $request -> searchValue;
             $key = $request -> searchKey;
 
-            $customers = Customer::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();;
+            $customers = Customer::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();
 
         } else {
 
@@ -25,16 +25,16 @@ class CustomerController extends Controller
             $sort = $request -> sort;
             $order = $request -> order;
             
-            #get | sort | page
-            if($order == 1 or $order == null){
+                #get | sort | page
+                if($order == 1 or $order == null){
 
-                $customers = Customer::get()->sortBy($sort)->skip($pageNo)->take($size);
+                    $customers = Customer::get()->sortBy($sort)->skip($pageNo)->take($size);
 
-            } else {
+                } else {
 
-                $customers = Customer::get()->sortByDesc($sort)->skip($pageNo)->take($size);
+                    $customers = Customer::get()->sortByDesc($sort)->skip($pageNo)->take($size);
 
-            }
+                }
         #display collection
         $customers = $customers->values()->all();
         }
