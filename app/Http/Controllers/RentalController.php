@@ -9,6 +9,11 @@ use App\Models\Customer;
 
 class RentalController extends Controller
 {
+    public function getCollectionSize()
+    {
+        $collectionSize = Rental::count();
+        return response($collectionSize, 200);
+    }
     public function getAllRentals(Request $request)
     {
          #optional search

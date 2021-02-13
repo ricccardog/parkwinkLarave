@@ -7,6 +7,11 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
+    public function getCollectionSize()
+    {
+        $collectionSize = Customer::count();
+        return response($collectionSize, 200);
+    }
     public function getAllCustomers(Request $request) 
     {
          #optional search
