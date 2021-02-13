@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('cars', 'App\Http\Controllers\CarController@getAllCars');
+Route::get('cars/collectionSize', 'App\Http\Controllers\CarController@getCollectionSize');
 Route::get('cars/{id}', 'App\Http\Controllers\CarController@getCar');
 Route::post('cars', 'App\Http\Controllers\CarController@createCar');
 Route::put('cars/{id}', 'App\Http\Controllers\CarController@updateCar');

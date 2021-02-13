@@ -8,6 +8,11 @@ use App\Models\Rental;
 
 class CarController extends Controller
 {
+    public function getCollectionSize()
+    {
+        $collectionSize = Car::count();
+        return response($collectionSize, 200);
+    }
 
     public function getAllCars(Request $request)
     {
@@ -18,7 +23,6 @@ class CarController extends Controller
             $key = $request-> searchKey;
 
             $cars = Car::where($key, 'LIKE', '%'. $query . '%')->get()->values()->all();
-        
         } else {
 
             #sort parameters
